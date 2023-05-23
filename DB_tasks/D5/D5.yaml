@@ -1,0 +1,539 @@
+openapi: 3.0.3
+info:
+  title: Flights manager
+  version: 0.0.1
+servers:
+  - url: http://localhost:3000/api/v1/
+    description: Server Test
+paths:
+  /cities:
+    get:
+      summary: List all the available source and destination cities
+      tags:
+        - Cities
+      operationId: getAllCities
+      responses:
+        '200':
+          description: Succesful response with list of the cities
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Cities"
+        'default':
+          description: Bad response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    
+  /airports:
+    get:
+      summary: List all the available source and destination airports
+      tags:
+        - Airports
+      operationId: getAllAirports
+      responses:
+        '200':
+          description: Succesful response with list of the airpots
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Airports"
+        'default':
+          description: Bad response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    
+  /airports/{city_name}:
+    get:
+      summary: List the airports within a city
+      tags:
+        - Airports
+      operationId: getAirportsWithinCity
+      parameters: 
+        - name: city_name
+          in: path
+          required: true
+          description: Name of the city, where located airport
+          schema:
+            type: string
+          example: Omsk
+      responses:
+        '200':
+          description: Succesful response with list of the airports within a city
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Airports"
+        'default':
+          description: Bad response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+                
+  /airports/{airport_name}/inbound_schedule:
+    get:
+      summary: List the inbound schedule for an airport
+      tags:
+        - Airports
+      operationId: getAirportInboundSchedule
+      parameters: 
+        - name: airport_name
+          in: path
+          required: true
+          description: Name of the airport, which inbound shedule is needed
+          schema:
+            type: string
+          example: Omsk Central Airport
+      responses:
+        '200':
+          description: Succesful response with inbound shedule of the airport
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Inbound_schedule"
+        'default':
+          description: Bad response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+                
+  /airports/{airport_name}/outbound_schedule:
+    get:
+      summary: List the outbound schedule for an airport
+      tags:
+        - Airports
+      operationId: getAirportOutboundSchedule
+      parameters: 
+        - name: airport_name
+          in: path
+          required: true
+          description: Name of the airport, which outbound shedule is needed
+          schema:
+            type: string
+          example: Omsk Central Airport
+      responses:
+        '200':
+          description: Succesful response with outbound shedule of the airport
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Outbound_schedule"
+        'default':
+          description: Bad response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+                
+    
+  /routes/{params}:
+    get:
+      summary: List the routes from point A to B
+      tags:
+        - Routes
+      operationId: getRoutesByTwoPoints
+      parameters:
+          - name: params
+            in: path
+            required: true
+            schema:
+                oneOf:
+                - $ref: "#/components/schemas/Point_airport_airport"
+                - $ref: "#/components/schemas/Point_city_airport"
+                - $ref: "#/components/schemas/Point_airport_city"
+                - $ref: "#/components/schemas/Point_city_city"
+            example:
+              {
+                airport_starting: Omsk Central Airport,
+                airport_ending: Tolmachevo,
+                lower_date_boud: 2023-21-05,
+                upper_date_boud: 2023-24-05,
+                booking_class: Economy
+              }
+              
+            style: simple
+            explode: true
+      responses:
+        '200':
+          description: Succesful response with route from point A to B
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Routes"
+        'default':
+          description: Bad response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    
+  /routes/{route_id}/booking:
+    post:
+      summary: Make a booking for the chosen route
+      tags:
+        - Routes
+      operationId: routeBooking
+      parameters: 
+        - name: route_id
+          in: path
+          required: true
+          description: Id of the chosen route
+          schema:
+            type: string
+          example: 90012dc6-263f-4f1b-bdab-b2b2998f1fad
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: "#/components/schemas/Booking"
+      responses:
+        '200':
+          description: Succesful response with created booking
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Booking"
+        'default':
+          description: Bad response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      
+    put:
+      summary: Online check-in for a flight
+      tags:
+        - Routes
+      operationId: checkIn
+      parameters: 
+        - name: route_id
+          in: path
+          required: true
+          description: Id of the chosen route
+          schema:
+            type: string
+          example: 90012dc6-263f-4f1b-bdab-b2b2998f1fad
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: "#/components/schemas/Booking"
+      responses:
+        '200':
+          description: Succesful response with changed status
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Booking"
+                
+        'default':
+          description: Bad response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+ 
+ 
+components:
+  schemas:
+    City:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: object
+          properties:
+            en:
+              type: string
+              example: Omsk
+            ru:
+              type: string
+              example: Омск
+        coordinates:
+          type: string
+          example: (73.31050109863281,54.96699905395508) 
+          format: (x_coordinate, y_coordinate)
+        timezone:
+          type: string
+          example: Asia/Omsk
+          format: region/zone
+    
+    Cities:
+      type: array
+      items:
+        $ref: "#/components/schemas/City"
+    
+    Error:
+      type: object
+      required:
+       - code
+       - message
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not found!
+      
+    Airport:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: object
+          properties:
+            en:
+              type: string
+              example: Omsk Central Airport
+            ru:
+              type: string
+              example: Омск-Центральный
+        abbreviature:
+          type: string
+          example: OMS
+        timezone:
+          type: string
+          example: Asia/Omsk
+          format: region/zone
+      
+    Airports:
+      type: array
+      items:
+        $ref: "#/components/schemas/Airport"
+      
+    Inbound_flight:
+      type: object
+      required:
+        - flight_no
+        - origin
+        - arrival_date
+      properties:
+        flight_no:
+          type: string
+          example: PG0405
+        origin:
+          type: string
+          example: OMS
+        arrival_date:
+          type: string
+          example: 2023-24-05 13:44:00+04
+          format: YYYY-MM-DD HH:MM:DD+00
+      
+    Inbound_schedule:
+      type: array
+      items:
+        $ref: "#/components/schemas/Inbound_flight"
+      
+    Outbound_flight:
+      type: object
+      required:
+        - flight_no
+        - destination
+        - departure_date
+      properties:
+        flight_no:
+          type: string
+          example: PG0406
+        destination:
+          type: string
+          example: LED
+        departure_date:
+          type: string
+          example: 2023-24-05 00:36:00+04
+          format: YYYY-MM-DD HH:MM:DD+00  
+      
+    Outbound_schedule:
+      type: array
+      items:
+        $ref: "#/components/schemas/Outbound_flight"
+    
+    Point_airport_airport:
+      type: object
+      required:
+          - airport_starting
+          - params
+          - airport_ending
+      properties:
+        airport_starting:
+          type: string
+          example: Tolmachevo
+          description: Name of the the starting airport
+        params:
+          $ref: "#/components/schemas/Point_static_params"
+        airport_ending:
+          type: string
+          example: Omsk Central Airport
+          description: Name of the the ending aiport
+          
+    Point_city_airport:
+      type: object
+      required:
+          - city_starting
+          - params
+          - airport_ending
+      properties:
+        city_starting:
+          type: string
+          example: Novosibirsk
+          description: Name of the the starting city
+        params:
+          $ref: "#/components/schemas/Point_static_params"
+        airport_ending:
+          type: string
+          example: Omsk Central Airport
+          description: Name of the the ending aiport
+      
+    Point_airport_city:
+      type: object
+      required:
+          - airport_starting
+          - params
+          - city_ending
+      properties:
+        airport_starting:
+          type: string
+          example: Tolmachevo
+          description: Name of the the starting airport
+        params:
+          $ref: "#/components/schemas/Point_static_params"
+        city_ending:
+          type: string
+          example: Omsk
+          description: Name of the the ending city
+      
+    Point_city_city:
+      type: object
+      required:
+          - city_starting
+          - params
+          - city_ending
+      properties:
+        city_starting:
+          type: string
+          example: Novosibirsk
+          description: Name of the the starting city
+        params:
+          $ref: "#/components/schemas/Point_static_params"
+        city_ending:
+          type: string
+          example: Omsk
+          description: Name of the the ending city
+      
+    Point_static_params:
+      type: object
+      required:
+          - lower_date_bound
+          - upper_date_boud
+          - booking_class
+      properties:
+        lower_date_boud:
+          type: string
+          example: 2023-21-05
+          format: YYYY-MM-DD HH:MM:DD+00
+          description: Search flights from this date
+        upper_date_boud:
+          type: string
+          example: 2023-24-05
+          format: YYYY-MM-DD HH:MM:DD+00
+          description: Search flights before this date
+        booking_class:
+          type: string
+          enum:
+            - Economy
+            - Comfort
+            - Business
+          description: Chosen tariff
+        transfer_limit:
+          type: integer
+          example: 1
+          minimum: 0
+          maximum: 10
+          description: Maximum numbers of transfers allowed
+      
+    Flight:
+      type: object
+      required:
+        - flight_no
+        - origin
+        - departure_date
+        - destination
+        - arrival_date
+      properties:
+        flight_no:
+          type: string
+          example: PG0405
+        origin:
+          type: string
+          example: OMS
+        departure_date:
+          type: string
+          example: 2023-24-05 13:01:00+04
+          format: YYYY-MM-DD HH:MM:DD+00
+        destination:
+          type: string
+          example: LED
+        arrival_date:
+          type: string
+          example: 2023-24-05 13:44:00+04
+          format: YYYY-MM-DD HH:MM:DD+00
+      
+    Routes:
+      type: object
+      required:
+        - route_id
+        - fligts
+      properties:
+        route_id:
+          type: string
+          example: 90012dc6-263f-4f1b-bdab-b2b2998f1fad
+        flights:
+          type: array
+          items:
+            $ref: "#/components/schemas/Flight"
+      
+    Booking:
+      type: object
+      required:
+        - ticket_no
+        - booking_reference
+        - passport
+        - name
+        - contact_data
+        - status
+      properties:
+        ticket_no:
+          type: string
+          example: 0005432000991
+        booking_reference:
+          type: string
+          example: F313DD
+        passport:
+          type: string
+          example: 6615 976589
+          format: serial_number number
+        name:
+          type: string
+          example: MAKSIM ZHUKOV
+          format: NAME SURNAME
+        contact_data:
+          type: object
+          required:
+            - phone_number
+          properties:
+            phone_number:
+              type: string
+              example: +70791452932
+            email:
+              type: string
+              example: m-zhukov061972@postgrespro.ru
+        status:
+          type: string
+          default: Bought ticket
