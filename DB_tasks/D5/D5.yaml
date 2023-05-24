@@ -130,8 +130,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
                 
-    
-  /routes/{params}:
+  /routes:
     get:
       summary: List the routes from point A to B
       tags:
@@ -139,7 +138,7 @@ paths:
       operationId: getRoutesByTwoPoints
       parameters:
           - name: params
-            in: path
+            in: query
             required: true
             schema:
                 oneOf:
@@ -156,7 +155,7 @@ paths:
                 booking_class: Economy
               }
               
-            style: simple
+            style: form
             explode: true
       responses:
         '200':
@@ -172,7 +171,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     
-  /routes/{route_id}/booking:
+  /routes/booking:
     post:
       summary: Make a booking for the chosen route
       tags:
@@ -180,7 +179,7 @@ paths:
       operationId: routeBooking
       parameters: 
         - name: route_id
-          in: path
+          in: query
           required: true
           description: Id of the chosen route
           schema:
@@ -204,32 +203,33 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      
-    put:
+  
+  /check_in:  
+    post:
       summary: Online check-in for a flight
       tags:
-        - Routes
+        - Check in
       operationId: checkIn
       parameters: 
-        - name: route_id
-          in: path
+        - name: booking_reference
+          in: query
           required: true
-          description: Id of the chosen route
+          description: Id of the booking
           schema:
             type: string
-          example: 90012dc6-263f-4f1b-bdab-b2b2998f1fad
+          example: F313DD
       requestBody:
         content:
           application/json:
             schema: 
-              $ref: "#/components/schemas/Booking"
+              $ref: "#/components/schemas/Boarding_pass"
       responses:
         '200':
           description: Succesful response with changed status
           content:
             application/json:
               schema: 
-                $ref: "#/components/schemas/Booking"
+                $ref: "#/components/schemas/Boarding_pass"
                 
         'default':
           description: Bad response
@@ -499,7 +499,8 @@ components:
           items:
             $ref: "#/components/schemas/Flight"
       
-    Booking:
+      
+    Ticket:
       type: object
       required:
         - ticket_no
@@ -507,7 +508,6 @@ components:
         - passport
         - name
         - contact_data
-        - status
       properties:
         ticket_no:
           type: string
@@ -534,6 +534,43 @@ components:
             email:
               type: string
               example: m-zhukov061972@postgrespro.ru
-        status:
+      
+    Booking:
+      type: object
+      required:
+        - booking_reference
+        - book_date
+        - price
+      properties:
+        booking_reference:
           type: string
-          default: Bought ticket
+          example: F313DD
+        book_date:
+          type: string
+          example: 2023-24-05 13:01:00+04
+          format: YYYY-MM-DD HH:MM:DD+00
+        price:
+          type: number
+          example: 265700.00
+          format: nimeric(10,2)
+      
+    Boarding_pass:
+      type: object
+      required:
+        - ticket_no
+        - flight_id
+        - boarding_no
+        - seat_no
+      properties:
+        ticket_no:
+          type: string
+          example: 0005432000991
+        flight_id:
+          type: integer
+          example: 28935
+        boarding_no:
+          type: integer
+          example: 10
+        seat_no:
+          type: string
+          example: 7A
