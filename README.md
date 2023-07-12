@@ -156,3 +156,40 @@ For each person in the list above the information must be the following:
 
 
 Hint: XSLT functions position() and id() are useful here.
+
+## DB Tasks
+Tasks in this block are built upon the Flights database:
+https://postgrespro.ru/education/demodb. Choose the database size based on the space
+availability.
+### Task D4
+Restore the price information for each flight based on the past bookings, and build the
+pricing rule table that determines the prices for all upcoming flights.
+### Task D5
+Design the RESTful web service to handle the following requests:
+- List all the available source and destination cities
+- List all the available source and destination airports
+- List the airports within a city
+- List the inbound schedule for an airport:
+- Days of week
+- Time of arrival
+- Flight no
+- Origin
+- List the outbound schedule for an airport:
+- Days of week
+- Time of departure
+- Flight no
+- Destination
+- List the routes connecting two points
+- Point might be either an airport or a city. In the latter case we should search
+for the flights connecting any airports within the city
+- The mandatory “departure date” parameter limits the flights by the ones
+departing between 0:00:00 of the specified date and 0:00:00 of the next date
+- The “booking class” parameter should be one of the 'Economy',
+'Comfort', 'Business'
+- Additional parameter limits the number of connections: 0 (direct), 1, 2, 3,
+unbound
+- Create a booking for a selected route for a single passenger
+- Online check-in for a flight
+### Task D6
+Implement the RESTful web service described above. Consider adding the appropriate
+indexes to make the requests reasonably fast.
