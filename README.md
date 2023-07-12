@@ -5,100 +5,99 @@ Tasks for Info Storage &amp; Analysis course
 
 ## Java Tasks
 
-### Задание №1
-Напишите программу, которая создаёт нить. Родительская и вновь созданная нити должны распечатать десять строк текста.
+### Task J1
+Write a program that creates a thread. The parent and newly created threads should print out ten lines of text.
 
+### Task J2
+Modify the program from "Task #1" so that the parent thread outputs after the child terminates.
 
-### Задание №2
-Модифицируйте программу из “Задания №1” так, чтобы вывод родительской нити производился после завершения дочерней.
+### Task J3
+Write a program that creates four threads that execute the same method.
+This method should print the sequence of text strings passed as a parameter. Each of the threads created should print out a different sequence of lines.
 
-### Задание №3
-Напишите программу, которая создаёт четыре нити, исполняющие один и тот же метод.
-Этот метод должен распечатать последовательность текстовых строк, переданных как параметр. Каждая из созданных нитей должна распечатать различные последовательности строк.
+### Task J4
+The child thread should print the text to the screen. Two seconds after the creation of the child thread, the parent thread must terminate it.
 
-### Задание №4
-Дочерняя нить должна распечатывать текст на экран. Через две секунды после создания дочерней нити, родительская нить должна прервать её.
+### Task J5
+Modify the program from "Task 4" so that the child thread prints out a message about it before terminating.
 
-### Задание №5
-Модифицируйте программу из “Задания 4” так, чтобы дочерняя нить перед завершением распечатывала сообщение об этом.
+### Task J6
+Appendix 1 contains the code of the program that you need to modify.
 
-### Задание №6
-В приложении №1 находится код программы, которую вам необходимо доработать.
+Legend:
+1. The Company class characterizes a company divided into departments.
+2. Each department (Department class) can calculate the sum from 1 to n, where n is a random number from 1 to 6.
+3. Each summation iteration takes 1 second. Therefore: if n is 3, then it will take 3 seconds to calculate the sum 0 + 1 + 2 (the performCalculations method).
 
-Легенда:
-1. Класс Company характеризует компанию, разделённую на отделы.
-2. Каждый отдел (класс Department) умеет вычислять сумму от 1 до n, где n — это рандомное число от 1 до 6.
-3. Каждая итерация суммирования занимает 1 секунду. Поэтому: если n равно 3, то на вычисление суммы 0 + 1 + 2 уйдёт 3 секунды (метод performCalculations).
+You need to add an implementation of the Founder class, in which:
+1. You will have a list with all Workers (Runnable).
+2. Each Worker must be assigned its own Department.
+3. Each Worker must initiate the start of calculations.
+4. After calculations are completed in all threads, you need to display the result (showCollaborativeResult method)
+Note:
+It is necessary to understand how barriers work in Java.
 
-Вам необходимо дописать реализацию класса Founder, в котором:
-1. У вас будет находиться список со всеми Worker’ами (Runnable).
-2. За каждым Worker’ом должен быть закреплён свой Department.
-3. Каждый Worker должен инициировать запуск вычислений.
-4. После того как во всех нитях завершатся вычисления, нужно вывести результат (метод showCollaborativeResult)
-Примечание:
-Следует разобраться как работают барьеры в Java.
+### Task J7
+Write a program that calculates the number Pi using the Leibniz series (Fig. 1).
+The number of program threads must be specified by a command line option.
+The number of iterations can be determined at compile time.
 
-### Задание №7
-Напишите программу, которая вычисляет число Пи при помощи ряда Лейбница (рис. 1).
-Количество потоков программы должно определяться параметром командной строки.
-Количество итераций может определяться во время компиляции.
+### Task J8
+Modify the program from “Assignment #7” so that it does not terminate on its own.
+Instead, after receiving the SIGINT signal, the program should exit as soon as possible, collect the partial sums of the series, and print the resulting number approximation.
 
-### Задание №8
-Модифицируйте программу из “Задания №7” так, чтобы сама по себе она не завершалась.
-Вместо этого, после получения сигнала SIGINT программа должна как можно скорее завершаться, собирать частичные суммы ряда и выводить полученное приближение числа.
+Recommendations:
+The expected solution is that you install a SIGINT handler. Consider how to minimize the error caused by different threads having different number of iterations by the time they complete. Most likely, such minimization should be provided by increasing the time between receiving the signal and the output.
 
-Рекомендации:
-Ожидаемое решение состоит в том, что вы установите обработчик SIGINT. Подумайте, как минимизировать ошибку, обусловленную тем, что разные потоки к моменту завершения успели пройти разное количество итераций. Скорее всего, такая минимизация должна обеспечиваться за счет увеличения времени между получением сигнала и выходом.
+### Task J9
+Write a program that simulates the well-known dining philosopher problem. Five philosophers sit at a round table eating spaghetti. Spaghetti is eaten with two forks. Every two philosophers sitting next to each other use a common fork. The philosopher thinks for a while, then tries to pick up the forks and starts eating. After eating some spaghetti, the philosopher releases the forks and begins to think again. After a while, he starts eating again, and so on, until the spaghetti runs out. If one of the forks cannot be taken, the philosopher waits until it is free. As an implementation option: philosophers are simulated using threads, periods of reflection and eating are simulated using falling asleep, and forks are simulated using mutexes. Philosophers always take the left fork first and then the right.
 
-### Задание №9
-Напишите программу, которая будет симулировать известную задачу про обедающих философов. Пять философов сидят за круглым столом и едят спагетти. Спагетти едят при помощи двух вилок. Каждые двое философов, сидящих рядом, пользуются общей вилкой. Философ некоторое время размышляет, потом пытается взять вилки и принимается за еду. Съев некоторое количество спагетти, философ освобождает вилки и снова начинает размышлять. Еще через некоторое время он снова принимается за еду, и т.д., пока спагетти не кончатся. Если одну из вилок взять не получается, философ ждет, пока она освободится. Как вариант реализации: философы симулируются при помощи нитей, периоды размышлений и еды – при помощи засыпаний, а вилки – при помощи мьютексов. Философы всегда берут сначала левую вилку, а потом правую.
+Additionally:
+Explain under what circumstances this can lead to a deadlock.
+Change the protocol of interaction between philosophers and forks in such a way that the dead
+blocking did not occur.
 
-Дополнительно:
-Объясните, при каких обстоятельствах это может приводить к мертвой блокировке.
-Измените протокол взаимодействия философов с вилками таким образом, чтобы мертвых
-блокировок не происходило.
+### Task J10
+Modify the program from “Task #1” so that the output of the parent and child
+threads was synchronized: first the parent thread output the first line, then
+child, then parent second row, and so on. Use mutexes.
 
-### Задание №10
-Модифицируйте программу из “Задания №1” так, чтобы вывод родительской и дочерней
-нитей был синхронизирован: сначала родительская нить выводила первую строку, затем
-дочерняя, затем родительская вторую строку и т.д. Используйте мьютексы.
+Note:
+Explicit and implicit transfers of control between threads and idle loops are allowed
+only be used during the initialization phase.
 
-Примечание:
-Явные и неявные передачи управления между нитями и холостые циклы разрешается
-использовать только на этапе инициализации.
+### Task J11
+Solve “Assignment #10” using two counter semaphores.
 
-### Задание №11
-Решите “Задание №10” с использованием двух семафоров-счетчиков.
+### Task J12
+The parent thread of the program must read the lines entered by the user.
+and put them at the top of the linked list. Lines longer than 80 characters can be cut
+for several lines. When you enter an empty string, the program should return the current
+list state. The child thread wakes up every five seconds and sorts the list
+in lexicographic order (use bubble sort).
 
-### Задание №12
-Родительская нить программы должна считывать вводимые пользователем строки
-и помещать их в начало связанного списка. Строки длиннее 80 символов можно разрезать
-на несколько строк. При вводе пустой строки программа должна выдавать текущее
-состояние списка. Дочерняя нить пробуждается каждые пять секунд и сортирует список
-в лексикографическом порядке (используйте пузырьковую сортировку).
+Note:
+All operations on the list must be synchronized using synchronized
+blocks on head objects.
 
-Примечание:
-Все операции над списком должны синхронизоваться при помощи синхронизованных
-блоков на объектах головы.
+### Task J13
+Solve the problem from “Assignment #9” using atomic fork capture. When the philosopher
+can take one fork, but cannot take another, he must put the fork on the table
+and wait until both forks are released.
+Recommendation: create another forks mutex and a condition variable. When trying to take
+Philosopher must capture forks and check the availability of both forks. If one
+from the forks is not available, the philosopher must release the second fork (if he has time to
+capture it) and sleep on the condition variable. Freeing the forks, the philosopher must
+notify other philosophers about it with a condition variable. Thoroughly
+consider the procedure for acquiring and releasing mutexes to avoid errors
+lost awakening.
 
-### Задание №13
-Решите задачу из “Задания №9” при помощи атомарного захвата вилок. Когда философ
-может взять одну вилку, но не может взять другую, он должен положить вилку на стол
-и ждать, пока освободятся обе вилки.
-Рекомендация: создайте еще мьютекс forks и условную переменную. При попытке взять
-вилку философ должен захватывать forks и проверять доступность обоих вилок. Если одна
-из вилок недоступна, философ должен освободить вторую вилку (если он успел
-ее захватить) и заснуть на условной переменной. Освобождая вилки, философ должен
-оповещать остальных философов об этом при помощи условной переменной. Тщательно
-продумайте процедуру захвата и освобождения мьютексов, чтобы избежать ошибок
-потерянного пробуждения.
-
-### Задание №14
-Разработайте имитатор производственной линии, изготавливающей винтики (widget).
-Винтик собирается из детали C и модуля, который, в свою очередь, состоит из деталей A и
-B. Для изготовления детали A требуется 1 секунда, В – две секунды, С – три секунды.
-Задержку изготовления деталей имитируйте при помощи засыпания. Используйте
-семафоры-счётчики.
+### Task J14
+Develop a mock production line that makes screws (widget).
+The screw is assembled from part C and a module, which, in turn, consists of parts A and
+B. Part A takes 1 second, B two seconds, C three seconds.
+Simulate the delay in the manufacture of parts by falling asleep. Use
+counter semaphores.
 
 ## Clojure Tasks
 ### Task C1
